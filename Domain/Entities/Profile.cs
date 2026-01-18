@@ -30,7 +30,7 @@ public class Profile : BaseEntity<Ulid>, IHasArchiveTrack, IHasTrackDateAttribut
     /// <summary>
     /// Опыт, необходимый до следующего уровня
     /// </summary>
-    public long ExperienceToNextLevel => CalculateExpToNextLevel();
+    public long ExperienceToNextLevel { get; set; }
 
     /// <summary>
     /// Статус архивности
@@ -46,9 +46,4 @@ public class Profile : BaseEntity<Ulid>, IHasArchiveTrack, IHasTrackDateAttribut
     /// Дата изменения
     /// </summary>
     public DateTimeOffset? UpdatedAt { get; set; }
-
-    private long CalculateExpToNextLevel()
-    {
-        return (long)(100 * Math.Pow(Level, 1.5));
-    }
 }
