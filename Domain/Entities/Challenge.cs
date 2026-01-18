@@ -18,7 +18,14 @@ public class Challenge : BaseEntity<Ulid>, IHasArchiveTrack, IHasTrackDateAttrib
     /// </summary>
     public required string Description { get; set; }
 
+    /// <summary>
+    /// Дата начала
+    /// </summary>
     public required DateTimeOffset StartDate { get; set; }
+
+    /// <summary>
+    /// Дата окончания
+    /// </summary>
     public required DateTimeOffset EndDate { get; set; }
 
     /// <summary>
@@ -55,4 +62,14 @@ public class Challenge : BaseEntity<Ulid>, IHasArchiveTrack, IHasTrackDateAttrib
     /// Дата изменения
     /// </summary>
     public DateTimeOffset? UpdatedAt { get; set; }
+
+    /// <summary>
+    /// Ссылка на задания вызова
+    /// </summary>
+    public ICollection<ChallengeQuestBind>? ChallengeQuests { get; set; }
+
+    /// <summary>
+    /// Ссылка на вызовы пользователя
+    /// </summary>
+    public ICollection<UserChallengeBind>? UserChallenges { get; set; }
 }

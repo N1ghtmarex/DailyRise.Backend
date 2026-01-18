@@ -34,4 +34,9 @@ public class Quest : BaseEntity<Ulid>, IHasArchiveTrack, IHasTrackDateAttribute
     /// Дата изменения
     /// </summary>
     public DateTimeOffset? UpdatedAt { get; set; }
+
+    /// <summary>
+    /// Ссылка на задания вызова
+    /// </summary>
+    public ICollection<ChallengeQuestBind>? ChallngeQuests { get; set; }
 }

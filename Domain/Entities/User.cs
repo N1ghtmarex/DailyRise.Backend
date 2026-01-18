@@ -11,4 +11,9 @@ public class User : BaseEntity<Ulid>
     /// Имя пользователя
     /// </summary>
     public required string Username { get; set; }
+
+    /// <summary>
+    /// Ссылка на вызовы пользователя
+    /// </summary>
+    public ICollection<UserChallengeBind> UserChallenges { get; set; }
 }
