@@ -1,29 +1,29 @@
 using Api.Extensions;
-using Api.StartupConfigurations;
-using Api.StartupConfigurations.Options;
 using Domain;
-using Keycloak;
-using Keycloak.Configurations;
 using Microsoft.AspNetCore.Mvc;
+using TgMiniAppAuth;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddTgMiniAppAuth(builder.Configuration);
+
 builder.Services.AddControllers();
 
-builder.Services.RegisterKeycloakServices();
 builder.Services.RegisterDataAccessService(builder.Configuration);
-
-builder.Services.ConfigureOptions<KeycloakConfigurationSetup>();
-builder.Services.ConfigureOptions<KeycloakScopesConfigurationSetup>();
-
-builder.Services.AddKeycloakConfiguration();
 
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new UlidJsonConverter());
 });
 
-builder.Services.ConfigureSwagger();
+builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
 
 var app = builder.Build();
 
@@ -33,7 +33,7 @@ app.MapControllers();
 
 app.MigrateDb();
 
-app.ConfigureSwaggerUI();
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
