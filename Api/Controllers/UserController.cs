@@ -1,6 +1,7 @@
 ﻿using Application.Users.Commands;
 using Application.Users.Dtos;
 using Application.Users.Queries;
+using Core.EntityFramework.Features.SearchPagination.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,5 +47,17 @@ public class UserController(ISender sender, ITelegramUserAccessor telegramUserAc
     public IActionResult GetUser()
     {
         return Ok(telegramUserAccessor.User);
+    }
+
+    /// <summary>
+    /// Получение списка пользователей
+    /// </summary>
+    /// <param name="query">Тело запроса</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task<PagedResult<UserListViewModel>> GetUsers([FromQuery] GetUserListQuery query, CancellationToken cancellationToken)
+    {
+        return await sender.Send(query, cancellationToken);
     }
 }
