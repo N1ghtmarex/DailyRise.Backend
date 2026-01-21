@@ -1,7 +1,10 @@
 ﻿using Application.Challenges.Commands;
 using Application.Challenges.Mappers;
+using Application.UserChallenges.Dtos;
+using Application.UserChallenges.Mappers;
 using Core.Exceptions;
 using Domain;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TgMiniAppAuth.AuthContext.User;
@@ -33,6 +36,11 @@ internal class ChallengeCommandsHandlers(ApplicationDbContext dbContext, ITelegr
         }
 
         var createdChallenge = await dbContext.AddAsync(challengeToCreate, cancellationToken);
+
+        var userChallenges = UserChallengeMapper.MapToEntity(new InviteUserToChallengeModel { UserId = user.Id, ChallengeId = createdChallenge.Entity.Id},
+            InviteStatus.Accepted, DateTimeOffset.UtcNow);
+        await dbContext.AddAsync(userChallenges, cancellationToken);
+
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return createdChallenge.Entity.Id;
