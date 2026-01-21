@@ -19,18 +19,26 @@ public class UserChallengeBindConfiguration : IEntityTypeConfiguration<UserChall
             );
         builder.HasIndex(x => x.Id).IsUnique();
 
-        builder.Property(x => x.ChallengeId).IsRequired();
-        builder.HasIndex(x => x.ChallengeId).IsUnique(false);
-        builder.HasOne(x => x.Challenge)
-            .WithMany(x => x.UserChallenges)
-            .HasForeignKey(x => x.ChallengeId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Property(x => x.UserId).IsRequired();
+        builder.Property(x => x.UserId).IsRequired()
+            .HasConversion(
+                x => x.ToString(),
+                x => Ulid.Parse(x)
+            );
         builder.HasIndex(x => x.UserId).IsUnique(false);
         builder.HasOne(x => x.User)
-            .WithMany(x => x.UserChallenges)
+            .WithMany(x => x.ParticipatingChallenges)
             .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Property(x => x.ChallengeId).IsRequired()
+            .HasConversion(
+                x => x.ToString(),
+                x => Ulid.Parse(x)
+            );
+        builder.HasIndex(x => x.ChallengeId).IsUnique(false);
+        builder.HasOne(x => x.Challenge)
+            .WithMany(x => x.Participants)
+            .HasForeignKey(x => x.ChallengeId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(x => x.Status).IsRequired();

@@ -19,9 +19,14 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             );
         builder.HasIndex(x => x.Id).IsUnique();
 
-        builder.Property(x => x.ExternalUserId).IsRequired();
+        builder.Property(x => x.TelegramId).IsRequired();
+        builder.HasIndex(x => x.TelegramId).IsUnique();
 
-        builder.Property(x => x.Username).IsRequired().HasMaxLength(20);
+        builder.Property(x => x.Username).IsRequired().HasMaxLength(30);
         builder.HasIndex(x => x.Username).IsUnique();
+
+        builder.Property(x => x.CreatedAt).IsRequired();
+        builder.Property(x => x.UpdatedAt).IsRequired();
+        builder.Property(x => x.IsArchive).IsRequired();
     }
 }

@@ -1,10 +1,9 @@
 ﻿using Domain.Abstractions;
-using Domain.Enums;
 
 namespace Domain.Entities;
 
 /// <summary>
-/// Вызов
+/// Сущность "Испытание"
 /// </summary>
 public class Challenge : BaseEntity<Ulid>, IHasArchiveTrack, IHasTrackDateAttribute
 {
@@ -29,29 +28,16 @@ public class Challenge : BaseEntity<Ulid>, IHasArchiveTrack, IHasTrackDateAttrib
     public required DateTimeOffset EndDate { get; set; }
 
     /// <summary>
-    /// Опыт за выполнение
+    /// Идентификатор создателя
     /// </summary>
-    public required int ExperienceReward { get; set; }
-    
-    /// <summary>
-    /// Категория
-    /// </summary>
-    public required ChallengeCategory Category { get; set; }
+    public required Ulid AuthorId { get; set; }
 
     /// <summary>
-    /// Идентификатор автора
-    /// </summary>
-    public Ulid? AuthorId { get; set; }
-
-    /// <summary>
-    /// Автор
+    /// Создатель
     /// </summary>
     public User? Author { get; set; }
 
-    /// <summary>
-    /// Статус архивности
-    /// </summary>
-    public bool IsArchive { get; set; }
+    public ICollection<UserChallengeBind>? Participants { get; set; }
 
     /// <summary>
     /// Дата создания
@@ -59,17 +45,12 @@ public class Challenge : BaseEntity<Ulid>, IHasArchiveTrack, IHasTrackDateAttrib
     public DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>
-    /// Дата изменения
+    /// Дата обновления
     /// </summary>
     public DateTimeOffset? UpdatedAt { get; set; }
 
     /// <summary>
-    /// Ссылка на задания вызова
+    /// Статус архивности
     /// </summary>
-    public ICollection<ChallengeQuestBind>? ChallengeQuests { get; set; }
-
-    /// <summary>
-    /// Ссылка на вызовы пользователя
-    /// </summary>
-    public ICollection<UserChallengeBind>? UserChallenges { get; set; }
+    public bool IsArchive { get; set; }
 }

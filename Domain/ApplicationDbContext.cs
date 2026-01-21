@@ -9,11 +9,9 @@ namespace Domain;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
     public DbSet<Challenge> Challenges { get; set; }
-    public DbSet<ChallengeQuestBind> ChallengeQuestBinds { get; set; }
-    public DbSet<Profile> Profiles { get; set; }
-    public DbSet<Quest> Quests { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<UserChallengeBind> UserChallengeBinds { get; set; }
+    public DbSet<UserChallengeCheckIn> UserChallengeCheckIns { get; set; }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
