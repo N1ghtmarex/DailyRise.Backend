@@ -50,7 +50,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     private void UpdateDateTrack()
     {
         var entries = ChangeTracker.Entries<IHasTrackDateAttribute>()
-            .Where(x => x.State == EntityState.Modified);
+            .Where(x => x.State == EntityState.Modified || x.State == EntityState.Added);
 
         foreach (var entry in entries)
         {
