@@ -1,5 +1,6 @@
 using Api.Extensions;
 using Api.Extensions.TelegramAuthentication;
+using Application;
 using Domain;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -57,6 +58,8 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+builder.Services.RegisterUseCasesService();
 
 builder.Services.AddHttpContextAccessor();
 

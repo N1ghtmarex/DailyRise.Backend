@@ -26,7 +26,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(x => x.Username).IsUnique();
 
         builder.Property(x => x.CreatedAt).IsRequired();
-        builder.Property(x => x.UpdatedAt).IsRequired();
+        builder.Property(x => x.UpdatedAt).IsRequired(false);
         builder.Property(x => x.IsArchive).IsRequired();
     }
 }
