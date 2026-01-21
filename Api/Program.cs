@@ -1,11 +1,15 @@
 using Api.Extensions;
 using Api.Extensions.TelegramAuthentication;
+using Api.StartupConfigurations.Options;
 using Application;
 using Domain;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using TgMiniAppAuth;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +30,18 @@ builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
+    c.SchemaFilter<UlidSchemaFilter>();
+    c.SchemaFilter<EnumSchemaFilter>();
+
+    Directory
+        .GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly)
+        .ToList()
+        .ForEach(xmlFile =>
+        {
+            var doc = XDocument.Load(xmlFile);
+            c.IncludeXmlComments(() => new XPathDocument(doc.CreateReader()), includeControllerXmlComments: true);
+        });
+
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "Telegram Mini App API",
