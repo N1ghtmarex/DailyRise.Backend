@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using TgMiniAppAuth;
 using TgMiniAppAuth.AuthContext.User;
 
-namespace Api;
+namespace Api.Controllers;
 
 [ApiController]
 [Authorize(AuthenticationSchemes = TgMiniAppAuthConstants.AuthenticationScheme)]
 [Route("/api/telegram")]
-public class Controller : ControllerBase
+public class TestController : ControllerBase
 {
     private readonly ITelegramUserAccessor _telegramUserAccessor;
 
-    public Controller(ITelegramUserAccessor telegramUserAccessor)
+    public TestController(ITelegramUserAccessor telegramUserAccessor)
     {
         _telegramUserAccessor = telegramUserAccessor;
     }
@@ -24,6 +24,7 @@ public class Controller : ControllerBase
     }
 
     [AllowAnonymous]
+    [HttpGet]
     public IActionResult Get()
     {
         return Ok();
