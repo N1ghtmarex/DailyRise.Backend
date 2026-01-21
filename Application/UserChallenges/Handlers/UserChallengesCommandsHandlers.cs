@@ -1,0 +1,58 @@
+﻿using Application.UserChallenges.Commands;
+using Application.UserChallenges.Mappers;
+using Core.Exceptions;
+using Domain;
+using Domain.Enums;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using TgMiniAppAuth.AuthContext.User;
+
+namespace Application.UserChallenges.Handlers;
+
+internal class UserChallengesCommandsHandlers(ApplicationDbContext dbContext, ITelegramUserAccessor telegramUserAccessor) 
+    : IRequestHandler<InviteUserToChallengeCommand, Ulid>
+{
+    public async Task<Ulid> Handle(InviteUserToChallengeCommand request, CancellationToken cancellationToken)
+    {
+        var invitedUser = await dbContext.Users
+            .AsNoTracking()
+            .Include(x => x.ParticipatingChallenges)
+            .SingleOrDefaultAsync(x => x.Id == request.Body.UserId && !x.IsArchive, cancellationToken)
+                ?? throw new ObjectNotFoundException($"Пользователь с идентификатором \"{request.Body.UserId}\" не найден или удален");
+
+        var challenge = await dbContext.Challenges
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == request.Body.ChallengeId && !x.IsArchive, cancellationToken)
+                ?? throw new ObjectNotFoundException($"Испытание с идентификатором \"{request.Body.ChallengeId}\" не найдено или уже завершено");
+
+        var telegramId = telegramUserAccessor.User.Id;
+
+        var hostUser = await dbContext.Users
+            .AsNoTracking()
+            .Include(x => x.ParticipatingChallenges)
+            .Include(x => x.CreatedChallenges)
+            .SingleOrDefaultAsync(x => x.TelegramId == telegramId, cancellationToken)
+                ?? throw new ObjectNotFoundException($"Пользователь с идентификатором \"{telegramId}\" не найден или удален");
+
+        if ((hostUser.CreatedChallenges != null && hostUser.CreatedChallenges.Count > 0 
+                && hostUser.CreatedChallenges.Select(x => x.Id).Contains(challenge.Id))
+            || (hostUser.ParticipatingChallenges != null && hostUser.ParticipatingChallenges.Count > 0 
+                    &&hostUser.ParticipatingChallenges.Select(x => x.Id).Contains(challenge.Id)))
+        {
+            throw new BusinessLogicException($"Вы не можете приглашать участников в это испытание");
+        }
+
+        if (invitedUser.ParticipatingChallenges != null && invitedUser.ParticipatingChallenges.Count > 0
+                && invitedUser.ParticipatingChallenges.Select(x => x.ChallengeId).Contains(challenge.Id))
+        {
+            throw new BusinessLogicException($"Этот пользователь уже приглашен");
+        }
+
+        var userChallengeBindToCreate = UserChallengeMapper.MapToEntity(request.Body, InviteStatus.Pending, null);
+
+        var createdUserChallengeBind = await dbContext.AddAsync(userChallengeBindToCreate, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return createdUserChallengeBind.Entity.Id;
+    }
+}

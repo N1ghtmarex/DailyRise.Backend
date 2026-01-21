@@ -44,6 +44,6 @@ public class UserChallengeBindConfiguration : IEntityTypeConfiguration<UserChall
         builder.Property(x => x.Status).IsRequired();
         builder.HasIndex(x => x.Status).IsUnique(false);
 
-        builder.Property(x => x.JoinedAt).IsRequired();
+        builder.Property(x => x.JoinedAt).IsRequired(false);
     }
 }
