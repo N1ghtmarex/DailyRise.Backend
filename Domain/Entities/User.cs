@@ -1,19 +1,49 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Abstractions;
 
-public class User : BaseEntity<Ulid>
+namespace Domain.Entities;
+
+/// <summary>
+/// Сущность "Пользователь"
+/// </summary>
+public class User : BaseEntity<Ulid>, IHasArchiveTrack, IHasTrackDateAttribute
 {
     /// <summary>
-    /// Идентификатор пользователя во внешней системе
+    /// Идентификатор пользователя в Telegram
     /// </summary>
-    public required Guid ExternalUserId { get; set; }
+    public required long TelegramId { get; set; }
 
     /// <summary>
     /// Имя пользователя
     /// </summary>
     public required string Username { get; set; }
+    
+    /// <summary>
+    /// Созданные испытания
+    /// </summary>
+    public ICollection<Challenge>? CreatedChallenges { get; set; }
 
     /// <summary>
-    /// Ссылка на вызовы пользователя
+    /// Участие в испытаниях
     /// </summary>
-    public ICollection<UserChallengeBind> UserChallenges { get; set; }
+    public ICollection<UserChallengeBind>? ParticipatingChallenges { get; set; }
+
+    /// <summary>
+    /// Отметки испытаний
+    /// </summary>
+    public ICollection<UserChallengeCheckIn>? ChallengeCheckIns { get; set; }
+
+    /// <summary>
+    /// Дата создания
+    /// </summary>
+    public DateTimeOffset CreatedAt { get; set; }
+
+    /// <summary>
+    /// Дата изменения
+    /// </summary>
+    public DateTimeOffset? UpdatedAt { get; set; }
+
+    /// <summary>
+    /// Статус архивности
+    /// </summary>
+    public bool IsArchive { get; set; }
 }
