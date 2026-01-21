@@ -18,11 +18,15 @@ builder.Services.Configure<JsonOptions>(options =>
     options.JsonSerializerOptions.Converters.Add(new UlidJsonConverter());
 });
 
-builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+builder.Services.AddCors(o => o.AddPolicy("CorsSetup", builder =>
 {
-    builder.AllowAnyOrigin()
+    builder.WithOrigins(
+        "https://beverlee-overoptimistic-caroyln.ngrok-free.dev",
+        "http://localhost:8080",
+        "https://daily-rise.ru")
            .AllowAnyMethod()
-           .AllowAnyHeader();
+           .AllowAnyHeader()
+           .AllowCredentials();
 }));
 
 var app = builder.Build();
@@ -33,7 +37,7 @@ app.MapControllers();
 
 app.MigrateDb();
 
-app.UseCors("AllowAll");
+app.UseCors("CorsSetup");
 
 app.UseAuthentication();
 app.UseAuthorization();
