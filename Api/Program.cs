@@ -1,9 +1,62 @@
 using Api.Extensions;
+using Api.Extensions.TelegramAuthentication;
 using Domain;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
 using TgMiniAppAuth;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Добавляем аутентификацию
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = "TelegramMiniApp";
+    options.DefaultChallengeScheme = "TelegramMiniApp";
+})
+.AddScheme<AuthenticationSchemeOptions, TelegramAuthenticationHandler>(
+    "TelegramMiniApp",
+    options => { });
+
+builder.Services.AddAuthorization();
+
+// Настройка Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Telegram Mini App API",
+        Version = "v1",
+        Description = "API for Telegram Mini Application"
+    });
+
+    // Добавляем поддержку кастомного заголовка авторизации
+    c.AddSecurityDefinition("TelegramMiniApp", new OpenApiSecurityScheme
+    {
+        Description = "Telegram Mini App Authorization header using the TMiniApp scheme",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "TMiniApp"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "TelegramMiniApp"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 builder.Services.AddHttpContextAccessor();
 
@@ -30,6 +83,16 @@ builder.Services.AddCors(o => o.AddPolicy("CorsSetup", builder =>
 }));
 
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Telegram Mini App API v1");
+
+    // Настраиваем поле для ввода заголовка авторизации в Swagger UI
+    c.DefaultModelsExpandDepth(-1); // Скрываем модели
+    c.DisplayRequestDuration();
+});
 
 app.UseHttpsRedirection();
 
