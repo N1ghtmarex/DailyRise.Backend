@@ -50,4 +50,16 @@ public class UserChallengeController(ISender sender)
     {
         return await sender.Send(command);
     }
+
+    /// <summary>
+    /// Отклонение испытания
+    /// </summary>
+    /// <param name="command">Модель запроса</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    [HttpPut("reject/{ChallengeId}")]
+    public async Task<Ulid> RejectChallenge([FromQuery] RejectChallengeCommand command, CancellationToken cancellationToken)
+    {
+        return await sender.Send(command);
+    }
 }
