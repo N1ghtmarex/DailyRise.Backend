@@ -33,7 +33,7 @@ public class UserController(ISender sender, ITelegramUserAccessor telegramUserAc
     /// <param name="query">Тело запроса</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns></returns>
-    [HttpGet("{Username}")]
+    [HttpGet("{TelegramId}")]
     public async Task<UserViewModel> GetUser([FromQuery] GetUserQuery query, CancellationToken cancellationToken)
     {
         return await sender.Send(query, cancellationToken);

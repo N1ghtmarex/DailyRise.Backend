@@ -16,11 +16,11 @@ internal class UserQueriesHandlers(ApplicationDbContext dbContext) : IRequestHan
     {
         var user = await dbContext.Users
             .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Username.ToLower() == request.Username.ToLower(), cancellationToken);
+            .SingleOrDefaultAsync(x => x.TelegramId == request.TelegramId, cancellationToken);
         
         if (user == null)
         {
-            throw new Exception($"Пользователь \"{request.Username}\" не найден");
+            throw new Exception($"Пользователь с Telegram ID = \"{request.TelegramId}\" не найден");
         }
 
         return UserMapper.MapToViewModel(user);

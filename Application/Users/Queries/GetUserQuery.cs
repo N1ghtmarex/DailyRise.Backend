@@ -10,5 +10,5 @@ public class GetUserQuery : IRequest<UserViewModel>
     /// Имя пользователя
     /// </summary>
     [FromRoute]
-    public required string Username { get; set; }
+    public required long TelegramId { get; set; }
 }
