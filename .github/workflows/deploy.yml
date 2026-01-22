@@ -1,4 +1,4 @@
-name: Docker Deploy
+name: Deploy
 
 on:
   push:
@@ -12,12 +12,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Upload project
+      - name: Upload project via SCP (password)
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          password: ${{ secrets.SSH_PASSWORD }}
           source: "."
           target: ${{ secrets.DEPLOY_PATH }}
 
@@ -26,7 +26,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd ${{ secrets.DEPLOY_PATH }}
             docker compose down
