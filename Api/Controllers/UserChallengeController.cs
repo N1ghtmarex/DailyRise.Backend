@@ -38,4 +38,16 @@ public class UserChallengeController(ISender sender)
     {
         return await sender.Send(query);
     }
+
+    /// <summary>
+    /// Принятие испытания
+    /// </summary>
+    /// <param name="command">Модель запроса</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    [HttpPut("{ChallengeId}")]
+    public async Task<Ulid> AcceptChallenge([FromQuery] AcceptChallengeCommand command, CancellationToken cancellationToken)
+    {
+        return await sender.Send(command);
+    }
 }
