@@ -45,7 +45,7 @@ public class UserChallengeController(ISender sender)
     /// <param name="command">Модель запроса</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns></returns>
-    [HttpPut("{ChallengeId}")]
+    [HttpPut("accept/{ChallengeId}")]
     public async Task<Ulid> AcceptChallenge([FromQuery] AcceptChallengeCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command);

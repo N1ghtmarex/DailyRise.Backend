@@ -75,7 +75,12 @@ internal class UserChallengesCommandsHandlers(ApplicationDbContext dbContext, IT
         var userChallenge = await dbContext.UserChallengeBinds
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.UserId == user.Id && x.ChallengeId == challenge.Id, cancellationToken)
-                ?? throw new ObjectNotFoundException($"Вы не являетесь участником этого испытания");
+                ?? throw new BusinessLogicException($"Вы не являетесь участником этого испытания");
+
+        if (userChallenge.Status != InviteStatus.Pending)
+        {
+            throw new BusinessLogicException($"Приглашение не находится на рассмотрении");
+        }
 
         userChallenge.Status = InviteStatus.Accepted;
         await dbContext.SaveChangesAsync(cancellationToken);
