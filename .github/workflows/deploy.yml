@@ -22,6 +22,9 @@ jobs:
         run: |
           docker save daily-rise-api:latest -o daily-rise-api.tar
 
+      - name: Fix permissions
+        run: chmod 644 daily-rise-api.tar
+
       - name: Upload image to server
         uses: appleboy/scp-action@v0.1.7
         with:
