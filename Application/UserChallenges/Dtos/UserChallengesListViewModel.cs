@@ -1,4 +1,6 @@
-﻿using Domain.Enums;
+﻿using Application.Challenges.Dtos;
+using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.UserChallenges.Dtos;
 
@@ -13,14 +15,14 @@ public class UserChallengesListViewModel
     public required Ulid Id { get; set; }
 
     /// <summary>
-    /// Идентификатор испытания
+    /// Испытание
     /// </summary>
-    public required Ulid ChallengeId { get; set; }
+    public ChallengeViewModel? Challenge { get; set; }
 
     /// <summary>
-    /// Идентификатор пользователя
+    /// Пользователь
     /// </summary>
-    public required Ulid UserId { get; set; }
+    public User? User { get; set; }
 
     /// <summary>
     /// Статус приглашения

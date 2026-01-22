@@ -1,4 +1,5 @@
-﻿using Application.Mappers;
+﻿using Application.Challenges.Mappers;
+using Application.Mappers;
 using Application.UserChallenges.Dtos;
 using Domain.Entities;
 using Domain.Enums;
@@ -8,6 +9,7 @@ namespace Application.UserChallenges.Mappers;
 
 [Mapper]
 [UseStaticMapper(typeof(GeneralMapper))]
+[UseStaticMapper(typeof(ChallengeMapper))]
 public static partial class UserChallengeMapper
 {
     [MapValue(nameof(User.Id), Use = nameof(@GeneralMapper.GenerateId))]
