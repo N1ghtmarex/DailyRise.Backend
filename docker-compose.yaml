@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
 
   webapp:
-    image: ghcr.io/N1ghtmarex/dailyrise-backend:latest
+    image: ghcr.io/n1ghtmarex/dailyrise-backend:latest
     container_name: dailyrise-webapp
     depends_on:
       - postgres
