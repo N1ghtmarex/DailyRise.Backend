@@ -48,5 +48,5 @@ public class ChallengeViewModel
     /// <summary>
     /// Дата обновления
     /// </summary>
-    public required DateTimeOffset UpdatedAt { get; set; }
+    public required DateTimeOffset? UpdatedAt { get; set; }
 }

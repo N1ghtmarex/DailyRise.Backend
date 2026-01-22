@@ -1,4 +1,5 @@
-﻿using Application.Mappers;
+﻿using Application.Challenges.Mappers;
+using Application.Mappers;
 using Application.UserChallenges.Dtos;
 using Domain.Entities;
 using Domain.Enums;
@@ -8,8 +9,11 @@ namespace Application.UserChallenges.Mappers;
 
 [Mapper]
 [UseStaticMapper(typeof(GeneralMapper))]
+[UseStaticMapper(typeof(ChallengeMapper))]
 public static partial class UserChallengeMapper
 {
     [MapValue(nameof(User.Id), Use = nameof(@GeneralMapper.GenerateId))]
     public static partial UserChallengeBind MapToEntity(InviteUserToChallengeModel source, InviteStatus status, DateTimeOffset? joinedAt);
+
+    public static partial IQueryable<UserChallengesListViewModel> ProjectToListViewModel(this IQueryable<UserChallengeBind> q);
 }
