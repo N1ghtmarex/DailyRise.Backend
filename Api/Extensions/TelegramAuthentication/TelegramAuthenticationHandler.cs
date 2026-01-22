@@ -28,6 +28,11 @@ public class TelegramAuthenticationHandler : AuthenticationHandler<Authenticatio
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
+        if (Request.Method == HttpMethods.Options)
+        {
+            return AuthenticateResult.NoResult();
+        }
+
         if (!Request.Headers.ContainsKey("Authorization"))
         {
             return AuthenticateResult.NoResult();

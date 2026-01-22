@@ -103,6 +103,19 @@ builder.Services.AddCors(o => o.AddPolicy("CorsSetup", builder =>
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors("CorsSetup");
+
+app.MigrateDb();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -112,16 +125,5 @@ app.UseSwaggerUI(c =>
     c.DefaultModelsExpandDepth(-1); // Скрываем модели
     c.DisplayRequestDuration();
 });
-
-app.UseHttpsRedirection();
-
-app.MapControllers();
-
-app.MigrateDb();
-
-app.UseCors("CorsSetup");
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.Run();
