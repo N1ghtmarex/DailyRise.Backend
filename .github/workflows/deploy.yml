@@ -1,46 +1,36 @@
-name: Build & Deploy Docker Image
+name: Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "master" ]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build image
-        run: |
-          docker build -t daily-rise-api:latest .
-
-      - name: Save image to tar
-        run: |
-          docker save daily-rise-api:latest -o daily-rise-api.tar
-
-      - name: Fix permissions
-        run: chmod 644 daily-rise-api.tar
-
-      - name: Upload image to server
-        uses: appleboy/scp-action@v0.1.7
+      - name: Login to GHCR
+        uses: docker/login-action@v3
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          source: "daily-rise-api.tar"
-          target: /opt/daily-rise
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Load & run on server
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Build and push image
+        uses: docker/build-push-action@v5
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/dailyrise-backend:latest
+
+      - name: Deploy on server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd /opt/daily-rise
-            docker load -i daily-rise-api.tar
+            cd /opt/dailyrise
+            docker pull ghcr.io/${{ github.repository_owner }}/dailyrise-backend:latest
             docker compose up -d
