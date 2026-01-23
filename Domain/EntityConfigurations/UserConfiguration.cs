@@ -25,7 +25,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Username).IsRequired(false).HasMaxLength(30);
         builder.HasIndex(x => x.Username).IsUnique();
 
-        builder.Property(x => x.Firstname).IsRequired().HasMaxLength(30);
+        builder.Property(x => x.Firstname).IsRequired(false).HasMaxLength(30);
         builder.HasIndex(x => x.Firstname).IsUnique(false);
 
         builder.Property(x => x.Lastname).IsRequired(false).HasMaxLength(30);

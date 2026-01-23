@@ -20,7 +20,7 @@ public class User : BaseEntity<Ulid>, IHasArchiveTrack, IHasTrackDateAttribute
     /// <summary>
     /// Имя
     /// </summary>
-    public required string Firstname { get; set; }
+    public string? Firstname { get; set; }
 
     /// <summary>
     /// Фамилия

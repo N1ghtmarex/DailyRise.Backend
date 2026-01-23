@@ -10,9 +10,9 @@ namespace Application.Users.Mappers
             var target = new global::Domain.Entities.User()
             {
                 TelegramId = source.TelegramId,
-                Firstname = source.Firstname,
             };
             target.Username = source.Username;
+            target.Firstname = source.Firstname;
             target.Lastname = source.Lastname;
             target.Id = global::Application.Mappers.GeneralMapper.GenerateId();
             return target;
