@@ -13,7 +13,7 @@ public class CreateUserModel
     /// <summary>
     /// Имя
     /// </summary>
-    public required string Firstname { get; set; }
+    public string? Firstname { get; set; }
 
     /// <summary>
     /// Фамилия
