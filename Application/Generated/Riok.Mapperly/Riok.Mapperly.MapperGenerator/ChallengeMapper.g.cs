@@ -32,7 +32,15 @@ namespace Application.Challenges.Mappers
                     Description = x.Description,
                     StartDate = x.StartDate,
                     EndDate = x.EndDate,
-                    AuthorId = x.AuthorId,
+                    Author = x.Author != null ? new global::Application.Users.Dtos.UserViewModel()
+                    {
+                        Id = x.Author.Id,
+                        Username = x.Author.Username,
+                        CreatedAt = x.Author.CreatedAt,
+                        UpdatedAt = x.Author.UpdatedAt,
+                        TelegramId = x.Author.TelegramId,
+                        IsArchive = x.Author.IsArchive,
+                    } : default,
                     IsArchive = x.IsArchive,
                     CreatedAt = x.CreatedAt,
                     UpdatedAt = x.UpdatedAt,
@@ -54,7 +62,15 @@ namespace Application.Challenges.Mappers
                     Description = x.Description,
                     StartDate = x.StartDate,
                     EndDate = x.EndDate,
-                    AuthorId = x.AuthorId,
+                    Author = x.Author != null ? new global::Application.Users.Dtos.UserViewModel()
+                    {
+                        Id = x.Author.Id,
+                        Username = x.Author.Username,
+                        CreatedAt = x.Author.CreatedAt,
+                        UpdatedAt = x.Author.UpdatedAt,
+                        TelegramId = x.Author.TelegramId,
+                        IsArchive = x.Author.IsArchive,
+                    } : default,
                     IsArchive = x.IsArchive,
                     CreatedAt = x.CreatedAt,
                     UpdatedAt = x.UpdatedAt,

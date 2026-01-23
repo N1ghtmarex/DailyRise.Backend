@@ -1,4 +1,6 @@
-﻿namespace Application.Challenges.Dtos;
+﻿using Application.Users.Dtos;
+
+namespace Application.Challenges.Dtos;
 
 /// <summary>
 /// Модель испытания
@@ -31,9 +33,9 @@ public class ChallengeViewModel
     public required DateTimeOffset EndDate { get; set; }
 
     /// <summary>
-    /// Идентификатор создателя
+    /// Модель создателя
     /// </summary>
-    public required Ulid AuthorId { get; set; }
+    public UserViewModel? Author { get; set; }
 
     /// <summary>
     /// Статус архивности
