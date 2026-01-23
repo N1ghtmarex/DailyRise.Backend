@@ -16,6 +16,16 @@ public class UserViewModel
     public string? Username { get; init; }
 
     /// <summary>
+    /// Имя
+    /// </summary>
+    public string? Firstname { get; init; }
+
+    /// <summary>
+    /// Фамилия
+    /// </summary>
+    public string? Lastname { get; init; }
+
+    /// <summary>
     /// Ссылка на аватар
     /// </summary>
     public string? PhotoUrl { get; init; }
