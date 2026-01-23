@@ -14,6 +14,7 @@ namespace Application.Users.Mappers
             target.Username = source.Username;
             target.Firstname = source.Firstname;
             target.Lastname = source.Lastname;
+            target.PhotoUrl = source.PhotoUrl;
             target.Id = global::Application.Mappers.GeneralMapper.GenerateId();
             return target;
         }
@@ -27,7 +28,8 @@ namespace Application.Users.Mappers
                 x => new global::Application.Users.Dtos.UserListViewModel()
                 {
                     Id = x.Id,
-                    Username = x.Username ?? "",
+                    Username = x.Username,
+                    PhotoUrl = x.PhotoUrl,
                     CreatedAt = x.CreatedAt,
                     UpdatedAt = x.UpdatedAt,
                     TelegramId = x.TelegramId,
@@ -43,7 +45,8 @@ namespace Application.Users.Mappers
             var target = new global::Application.Users.Dtos.UserViewModel()
             {
                 Id = source.Id,
-                Username = source.Username ?? throw new global::System.ArgumentNullException(nameof(source.Username)),
+                Username = source.Username,
+                PhotoUrl = source.PhotoUrl,
                 CreatedAt = source.CreatedAt,
                 UpdatedAt = source.UpdatedAt,
                 TelegramId = source.TelegramId,

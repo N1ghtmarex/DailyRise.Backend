@@ -35,7 +35,8 @@ namespace Application.Challenges.Mappers
                     Author = x.Author != null ? new global::Application.Users.Dtos.UserViewModel()
                     {
                         Id = x.Author.Id,
-                        Username = x.Author.Username ?? "",
+                        Username = x.Author.Username,
+                        PhotoUrl = x.Author.PhotoUrl,
                         CreatedAt = x.Author.CreatedAt,
                         UpdatedAt = x.Author.UpdatedAt,
                         TelegramId = x.Author.TelegramId,
@@ -65,7 +66,8 @@ namespace Application.Challenges.Mappers
                     Author = x.Author != null ? new global::Application.Users.Dtos.UserViewModel()
                     {
                         Id = x.Author.Id,
-                        Username = x.Author.Username ?? "",
+                        Username = x.Author.Username,
+                        PhotoUrl = x.Author.PhotoUrl,
                         CreatedAt = x.Author.CreatedAt,
                         UpdatedAt = x.Author.UpdatedAt,
                         TelegramId = x.Author.TelegramId,

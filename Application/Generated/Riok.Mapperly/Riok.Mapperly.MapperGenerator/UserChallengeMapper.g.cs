@@ -37,7 +37,8 @@ namespace Application.UserChallenges.Mappers
                         Author = x.Challenge.Author != null ? new global::Application.Users.Dtos.UserViewModel()
                         {
                             Id = x.Challenge.Author.Id,
-                            Username = x.Challenge.Author.Username ?? "",
+                            Username = x.Challenge.Author.Username,
+                            PhotoUrl = x.Challenge.Author.PhotoUrl,
                             CreatedAt = x.Challenge.Author.CreatedAt,
                             UpdatedAt = x.Challenge.Author.UpdatedAt,
                             TelegramId = x.Challenge.Author.TelegramId,

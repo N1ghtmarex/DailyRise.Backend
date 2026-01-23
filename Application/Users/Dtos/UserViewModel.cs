@@ -16,6 +16,11 @@ public class UserViewModel
     public string? Username { get; init; }
 
     /// <summary>
+    /// Ссылка на аватар
+    /// </summary>
+    public string? PhotoUrl { get; init; }
+
+    /// <summary>
     /// Дата создания
     /// </summary>
     public required DateTimeOffset CreatedAt { get; init; }

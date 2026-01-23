@@ -26,6 +26,11 @@ public class User : BaseEntity<Ulid>, IHasArchiveTrack, IHasTrackDateAttribute
     /// Фамилия
     /// </summary>
     public string? Lastname { get; set; }
+
+    /// <summary>
+    /// Ссылка на аватар
+    /// </summary>
+    public string? PhotoUrl { get; set; }
     
     /// <summary>
     /// Созданные испытания

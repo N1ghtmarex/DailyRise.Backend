@@ -21,6 +21,11 @@ public class CreateUserModel
     public string? Lastname  { get; set; }
 
     /// <summary>
+    /// Ссылка на аватар
+    /// </summary>
+    public string? PhotoUrl { get; set; }
+
+    /// <summary>
     /// Идентификатор в Telegram
     /// </summary>
     public required long TelegramId { get; set; }
