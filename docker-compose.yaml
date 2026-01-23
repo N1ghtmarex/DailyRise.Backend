@@ -8,6 +8,8 @@ services:
       POSTGRES_PASSWORD: 123
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     networks:
       - app-network
     restart: unless-stopped
@@ -23,6 +25,7 @@ services:
       ConnectionStrings__DbConnection: "Host=postgres;Database=DailyRise;Username=postgres;Password=123"
     ports:
       - "5000:5000"
+      - "5001:5001"
     networks:
       - app-network
     restart: unless-stopped

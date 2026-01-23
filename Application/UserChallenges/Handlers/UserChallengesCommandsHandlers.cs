@@ -75,8 +75,13 @@ internal class UserChallengesCommandsHandlers(ApplicationDbContext dbContext, IT
 
         var userChallenge = await dbContext.UserChallengeBinds
             .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.UserId == user.Id && x.ChallengeId == challenge.Id, cancellationToken)
-                ?? UserChallengeMapper.MapToEntity(new InviteUserToChallengeModel { ChallengeId = challenge.Id, UserId = user.Id }, InviteStatus.Accepted, DateTimeOffset.Now);
+            .SingleOrDefaultAsync(x => x.UserId == user.Id && x.ChallengeId == challenge.Id, cancellationToken);
+
+        if (userChallenge == null)
+        {
+            userChallenge = UserChallengeMapper.MapToEntity(new InviteUserToChallengeModel { ChallengeId = challenge.Id, UserId = user.Id }, InviteStatus.Accepted, DateTimeOffset.Now);
+            await dbContext.AddAsync(userChallenge, cancellationToken);
+        }
 
         userChallenge.Status = InviteStatus.Accepted;
         await dbContext.SaveChangesAsync(cancellationToken);
