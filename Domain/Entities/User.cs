@@ -15,7 +15,17 @@ public class User : BaseEntity<Ulid>, IHasArchiveTrack, IHasTrackDateAttribute
     /// <summary>
     /// Имя пользователя
     /// </summary>
-    public required string Username { get; set; }
+    public string? Username { get; set; }
+
+    /// <summary>
+    /// Имя
+    /// </summary>
+    public required string Firstname { get; set; }
+
+    /// <summary>
+    /// Фамилия
+    /// </summary>
+    public string? Lastname { get; set; }
     
     /// <summary>
     /// Созданные испытания

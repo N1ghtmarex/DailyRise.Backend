@@ -8,7 +8,17 @@ public class CreateUserModel
     /// <summary>
     /// Имя пользователя
     /// </summary>
-    public required string Username { get; set; }
+    public string? Username { get; set; }
+
+    /// <summary>
+    /// Имя
+    /// </summary>
+    public required string Firstname { get; set; }
+
+    /// <summary>
+    /// Фамилия
+    /// </summary>
+    public string? Lastname  { get; set; }
 
     /// <summary>
     /// Идентификатор в Telegram

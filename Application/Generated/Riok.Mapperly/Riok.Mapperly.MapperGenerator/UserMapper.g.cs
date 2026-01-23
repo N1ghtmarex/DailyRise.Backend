@@ -10,8 +10,10 @@ namespace Application.Users.Mappers
             var target = new global::Domain.Entities.User()
             {
                 TelegramId = source.TelegramId,
-                Username = source.Username,
+                Firstname = source.Firstname,
             };
+            target.Username = source.Username;
+            target.Lastname = source.Lastname;
             target.Id = global::Application.Mappers.GeneralMapper.GenerateId();
             return target;
         }
@@ -25,7 +27,7 @@ namespace Application.Users.Mappers
                 x => new global::Application.Users.Dtos.UserListViewModel()
                 {
                     Id = x.Id,
-                    Username = x.Username,
+                    Username = x.Username ?? "",
                     CreatedAt = x.CreatedAt,
                     UpdatedAt = x.UpdatedAt,
                     TelegramId = x.TelegramId,
@@ -41,7 +43,7 @@ namespace Application.Users.Mappers
             var target = new global::Application.Users.Dtos.UserViewModel()
             {
                 Id = source.Id,
-                Username = source.Username,
+                Username = source.Username ?? throw new global::System.ArgumentNullException(nameof(source.Username)),
                 CreatedAt = source.CreatedAt,
                 UpdatedAt = source.UpdatedAt,
                 TelegramId = source.TelegramId,
