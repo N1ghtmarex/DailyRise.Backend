@@ -13,7 +13,7 @@ public class UserViewModel
     /// <summary>
     /// Имя пользователя
     /// </summary>
-    public required string Username { get; init; }
+    public string? Username { get; init; }
 
     /// <summary>
     /// Дата создания
