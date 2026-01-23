@@ -1,4 +1,5 @@
 ﻿using Application.UserChallenges.Commands;
+using Application.UserChallenges.Dtos;
 using Application.UserChallenges.Mappers;
 using Core.Exceptions;
 using Domain;
@@ -75,12 +76,7 @@ internal class UserChallengesCommandsHandlers(ApplicationDbContext dbContext, IT
         var userChallenge = await dbContext.UserChallengeBinds
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.UserId == user.Id && x.ChallengeId == challenge.Id, cancellationToken)
-                ?? throw new BusinessLogicException($"Вы не являетесь участником этого испытания");
-
-        if (userChallenge.Status != InviteStatus.Pending)
-        {
-            throw new BusinessLogicException($"Приглашение не находится на рассмотрении");
-        }
+                ?? UserChallengeMapper.MapToEntity(new InviteUserToChallengeModel { ChallengeId = challenge.Id, UserId = user.Id }, InviteStatus.Accepted, DateTimeOffset.Now);
 
         userChallenge.Status = InviteStatus.Accepted;
         await dbContext.SaveChangesAsync(cancellationToken);
