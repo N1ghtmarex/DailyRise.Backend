@@ -23,7 +23,7 @@ public class UserChallengeController(ISender sender)
     [HttpPost("invite")]
     public async Task<Ulid> InviteUserToChallenge([FromQuery] InviteUserToChallengeCommand command, CancellationToken cancellationToken)
     {
-        return await sender.Send(command);
+        return await sender.Send(command, cancellationToken);
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public class UserChallengeController(ISender sender)
     public async Task<PagedResult<UserChallengesListViewModel>> GetUserChallenges([FromQuery] GetUserChallengeListQuery query,
         CancellationToken cancellationToken)
     {
-        return await sender.Send(query);
+        return await sender.Send(query, cancellationToken);
     }
 
     /// <summary>
@@ -48,7 +48,7 @@ public class UserChallengeController(ISender sender)
     [HttpPut("accept/{ChallengeId}")]
     public async Task<Ulid> AcceptChallenge([FromQuery] AcceptChallengeCommand command, CancellationToken cancellationToken)
     {
-        return await sender.Send(command);
+        return await sender.Send(command, cancellationToken);
     }
 
     /// <summary>
@@ -60,6 +60,30 @@ public class UserChallengeController(ISender sender)
     [HttpPut("reject/{ChallengeId}")]
     public async Task<Ulid> RejectChallenge([FromQuery] RejectChallengeCommand command, CancellationToken cancellationToken)
     {
-        return await sender.Send(command);
+        return await sender.Send(command, cancellationToken);
+    }
+
+    /// <summary>
+    /// Отметка выполнения испытания
+    /// </summary>
+    /// <param name="command">Модель запроса</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    [HttpPost("check-in")]
+    public async Task<Ulid> AddCheckIn([FromQuery] AddCheckInCommand command, CancellationToken cancellationToken)
+    {
+        return await sender.Send(command, cancellationToken);
+    }
+
+    /// <summary>
+    /// Получение отметок выполнения испытания
+    /// </summary>
+    /// <param name="query">Модель запроса</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    [HttpGet("check-in")]
+    public async Task<List<UserChallengeCheckInListViewModel>> GetCheckIns([FromQuery] GetUserChallengeCheckInsQuery query, CancellationToken cancellationToken)
+    {
+        return await sender.Send(query, cancellationToken);
     }
 }

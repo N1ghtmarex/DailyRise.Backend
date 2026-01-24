@@ -3,6 +3,7 @@ using Application.UserChallenges.Dtos;
 using Application.UserChallenges.Mappers;
 using Core.Exceptions;
 using Domain;
+using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ namespace Application.UserChallenges.Handlers;
 
 internal class UserChallengesCommandsHandlers(ApplicationDbContext dbContext, ITelegramUserAccessor telegramUserAccessor) 
     : IRequestHandler<InviteUserToChallengeCommand, Ulid>, IRequestHandler<AcceptChallengeCommand, Ulid>,
-    IRequestHandler<RejectChallengeCommand, Ulid>
+    IRequestHandler<RejectChallengeCommand, Ulid>, IRequestHandler<AddCheckInCommand, Ulid>
 {
     public async Task<Ulid> Handle(InviteUserToChallengeCommand request, CancellationToken cancellationToken)
     {
@@ -118,5 +119,40 @@ internal class UserChallengesCommandsHandlers(ApplicationDbContext dbContext, IT
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return userChallenge.Id;
+    }
+
+    public async Task<Ulid> Handle(AddCheckInCommand request, CancellationToken cancellationToken)
+    {
+        var user = await dbContext.Users
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == request.Body.UserId, cancellationToken)
+                ?? throw new ObjectNotFoundException($"Пользователь с идентификатором \"{request.Body.UserId}\" не найден");
+
+        var userChallenge = await dbContext.UserChallengeBinds
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.ChallengeId == request.Body.ChallengeId, cancellationToken)
+                ?? throw new ObjectNotFoundException($"Вы не являетесь участником испытания с идентификатором \"{request.Body.ChallengeId}\"");
+
+        var challengeCheckIns = await dbContext.UserChallengeCheckIns
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.UserChallengeBindId == userChallenge.Id && x.CheckInDate.Date == DateTimeOffset.UtcNow.Date, cancellationToken);
+
+        if (challengeCheckIns != null)
+        {
+            throw new BusinessLogicException($"Сегодня вы уже отмечали выполнение испытания");
+        }
+
+        var checkInToCreate = new UserChallengeCheckIn
+        {
+            Id = Ulid.NewUlid(),
+            CheckInDate = DateTime.UtcNow,
+            Status = CheckInStatus.Completed,
+            UserChallengeBindId = userChallenge.Id
+        };
+
+        var createdCheckIn = await dbContext.AddAsync(checkInToCreate, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return createdCheckIn.Entity.Id;
     }
 }

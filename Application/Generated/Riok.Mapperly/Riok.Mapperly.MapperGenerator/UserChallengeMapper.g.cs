@@ -38,6 +38,8 @@ namespace Application.UserChallenges.Mappers
                         {
                             Id = x.Challenge.Author.Id,
                             Username = x.Challenge.Author.Username,
+                            Firstname = x.Challenge.Author.Firstname,
+                            Lastname = x.Challenge.Author.Lastname,
                             PhotoUrl = x.Challenge.Author.PhotoUrl,
                             CreatedAt = x.Challenge.Author.CreatedAt,
                             UpdatedAt = x.Challenge.Author.UpdatedAt,

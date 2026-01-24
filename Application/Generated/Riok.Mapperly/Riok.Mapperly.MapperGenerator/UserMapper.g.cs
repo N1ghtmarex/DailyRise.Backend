@@ -29,6 +29,8 @@ namespace Application.Users.Mappers
                 {
                     Id = x.Id,
                     Username = x.Username,
+                    Firstname = x.Firstname,
+                    Lastname = x.Lastname,
                     PhotoUrl = x.PhotoUrl,
                     CreatedAt = x.CreatedAt,
                     UpdatedAt = x.UpdatedAt,
@@ -46,6 +48,8 @@ namespace Application.Users.Mappers
             {
                 Id = source.Id,
                 Username = source.Username,
+                Firstname = source.Firstname,
+                Lastname = source.Lastname,
                 PhotoUrl = source.PhotoUrl,
                 CreatedAt = source.CreatedAt,
                 UpdatedAt = source.UpdatedAt,
