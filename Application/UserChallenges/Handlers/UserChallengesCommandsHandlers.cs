@@ -131,7 +131,7 @@ internal class UserChallengesCommandsHandlers(ApplicationDbContext dbContext, IT
         var userChallenge = await dbContext.UserChallengeBinds
             .AsNoTracking()
             .Include(x => x.Challenge)
-            .SingleOrDefaultAsync(x => x.ChallengeId == request.Body.ChallengeId, cancellationToken)
+            .SingleOrDefaultAsync(x => x.ChallengeId == request.Body.ChallengeId && x.UserId == user.Id, cancellationToken)
                 ?? throw new ObjectNotFoundException($"Вы не являетесь участником испытания с идентификатором \"{request.Body.ChallengeId}\"");
 
         if (userChallenge.Challenge!.StartDate > DateTime.UtcNow)
