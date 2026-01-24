@@ -1,5 +1,6 @@
 using Api.Extensions;
 using Api.Extensions.TelegramAuthentication;
+using Api.Middlewares;
 using Api.StartupConfigurations.Options;
 using Application;
 using Domain;
@@ -125,5 +126,7 @@ app.UseSwaggerUI(c =>
     c.DefaultModelsExpandDepth(-1); // Скрываем модели
     c.DisplayRequestDuration();
 });
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.Run();
