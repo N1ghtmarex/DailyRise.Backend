@@ -36,6 +36,8 @@ namespace Application.Challenges.Mappers
                     {
                         Id = x.Author.Id,
                         Username = x.Author.Username,
+                        Firstname = x.Author.Firstname,
+                        Lastname = x.Author.Lastname,
                         PhotoUrl = x.Author.PhotoUrl,
                         CreatedAt = x.Author.CreatedAt,
                         UpdatedAt = x.Author.UpdatedAt,
@@ -67,6 +69,8 @@ namespace Application.Challenges.Mappers
                     {
                         Id = x.Author.Id,
                         Username = x.Author.Username,
+                        Firstname = x.Author.Firstname,
+                        Lastname = x.Author.Lastname,
                         PhotoUrl = x.Author.PhotoUrl,
                         CreatedAt = x.Author.CreatedAt,
                         UpdatedAt = x.Author.UpdatedAt,

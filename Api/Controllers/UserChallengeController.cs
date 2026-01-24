@@ -62,4 +62,16 @@ public class UserChallengeController(ISender sender)
     {
         return await sender.Send(command);
     }
+
+    /// <summary>
+    /// Отметка выполнения испытания
+    /// </summary>
+    /// <param name="command">Модель запроса</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    [HttpPost("check-in")]
+    public async Task<Ulid> AddCheckIn([FromQuery] AddCheckInCommand command, CancellationToken cancellationToken)
+    {
+        return await sender.Send(command);
+    }
 }
