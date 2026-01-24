@@ -1,10 +1,13 @@
 ﻿using Application.UserChallenges.Dtos;
 using Application.UserChallenges.Mappers;
 using Application.UserChallenges.Queries;
+using Application.Users.Dtos;
+using Application.Users.Mappers;
 using Core.EntityFramework.Features.SearchPagination;
 using Core.EntityFramework.Features.SearchPagination.Models;
 using Core.Exceptions;
 using Domain;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TgMiniAppAuth.AuthContext.User;
@@ -13,7 +16,8 @@ namespace Application.UserChallenges.Handlers;
 
 internal class UserChallengesQueriesHandlers(ApplicationDbContext dbContext, ITelegramUserAccessor telegramUserAccessor)
     : IRequestHandler<GetUserChallengeListQuery, PagedResult<UserChallengesListViewModel>>,
-    IRequestHandler<GetUserChallengeCheckInsQuery, List<UserChallengeCheckInListViewModel>>
+    IRequestHandler<GetUserChallengeCheckInsQuery, List<UserChallengeCheckInListViewModel>>,
+    IRequestHandler<GetChallengeUserListQuery, PagedResult<UserListViewModel>>
 {
     public async Task<PagedResult<UserChallengesListViewModel>> Handle(GetUserChallengeListQuery request, CancellationToken cancellationToken)
     {
@@ -54,5 +58,32 @@ internal class UserChallengesQueriesHandlers(ApplicationDbContext dbContext, ITe
             .ToListAsync(cancellationToken);
 
         return checkIns;
+    }
+
+    public async Task<PagedResult<UserListViewModel>> Handle(GetChallengeUserListQuery request, CancellationToken cancellationToken)
+    {
+        var challenge = await dbContext.Challenges
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == request.ChallengeId, cancellationToken)
+                ?? throw new ObjectNotFoundException($"Испытание с ID = \"{request.ChallengeId}\" не найдено");
+
+        var test = challenge.Participants;
+
+        var query = dbContext.Challenges
+            .AsNoTracking()
+            .Where(x => x.Id == request.ChallengeId)
+            .SelectMany(x => x.Participants!)
+                .Select(x => x.User)
+                .OrderBy(x => x!.Username)
+                .ThenBy(x => x!.Firstname)
+                .ThenBy(x => x!.Lastname)
+            .ApplySearch(request, [x => x!.Username, x => x!.Firstname, x => x!.Lastname]);
+
+        var result = await query
+            .ApplyPagination(request)
+            .ProjectToListViewModel()
+            .ToListAsync(cancellationToken);
+
+        return result.AsPagedResult(request, await query.CountAsync(cancellationToken));
     }
 }

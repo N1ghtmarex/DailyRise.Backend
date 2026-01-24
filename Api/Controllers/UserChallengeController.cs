@@ -1,6 +1,7 @@
 ﻿using Application.UserChallenges.Commands;
 using Application.UserChallenges.Dtos;
 using Application.UserChallenges.Queries;
+using Application.Users.Dtos;
 using Core.EntityFramework.Features.SearchPagination.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -83,6 +84,18 @@ public class UserChallengeController(ISender sender)
     /// <returns></returns>
     [HttpGet("check-in")]
     public async Task<List<UserChallengeCheckInListViewModel>> GetCheckIns([FromQuery] GetUserChallengeCheckInsQuery query, CancellationToken cancellationToken)
+    {
+        return await sender.Send(query, cancellationToken);
+    }
+
+    /// <summary>
+    /// Получение списка пользователей испытания
+    /// </summary>
+    /// <param name="query">Модель запроса</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    [HttpGet("{ChallengeId}/users")]
+    public async Task<PagedResult<UserListViewModel>> GetChallengeUsers([FromQuery] GetChallengeUserListQuery query, CancellationToken cancellationToken)
     {
         return await sender.Send(query, cancellationToken);
     }
