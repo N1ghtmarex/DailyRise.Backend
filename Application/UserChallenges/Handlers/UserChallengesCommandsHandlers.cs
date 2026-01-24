@@ -133,6 +133,11 @@ internal class UserChallengesCommandsHandlers(ApplicationDbContext dbContext, IT
             .SingleOrDefaultAsync(x => x.ChallengeId == request.Body.ChallengeId, cancellationToken)
                 ?? throw new ObjectNotFoundException($"Вы не являетесь участником испытания с идентификатором \"{request.Body.ChallengeId}\"");
 
+        if (userChallenge.Challenge!.StartDate >  DateTime.UtcNow)
+        {
+            throw new BusinessLogicException("Подождите пока испытание начнется!");
+        }
+
         var challengeCheckIns = await dbContext.UserChallengeCheckIns
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.UserChallengeBindId == userChallenge.Id && x.CheckInDate.Date == DateTimeOffset.UtcNow.Date, cancellationToken);
