@@ -5,15 +5,49 @@ namespace Application.UserChallenges.Mappers
     public static partial class UserChallengeCheckInMapper
     {
         [global::System.CodeDom.Compiler.GeneratedCode("Riok.Mapperly", "4.3.1.0")]
-        public static partial global::Domain.Entities.UserChallengeCheckIn MapToEntity(global::System.Ulid UserChallengeBindId, global::System.DateTimeOffset checkInDate, global::Domain.Enums.CheckInStatus status)
+        public static partial global::System.Linq.IQueryable<global::Application.UserChallenges.Dtos.UserChallengeCheckInListViewModel> ProjectToListViewModel(this global::System.Linq.IQueryable<global::Domain.Entities.UserChallengeCheckIn> q)
         {
-            var target = new global::Domain.Entities.UserChallengeCheckIn()
-            {
-                CheckInDate = checkInDate,
-                Status = status,
-            };
-            target.Id = global::Application.Mappers.GeneralMapper.GenerateId();
-            return target;
+#nullable disable
+            return global::System.Linq.Queryable.Select(
+                q,
+                x => new global::Application.UserChallenges.Dtos.UserChallengeCheckInListViewModel()
+                {
+                    Id = x.Id,
+                    UserChallengeBind = x.UserChallengeBind != null ? new global::Application.UserChallenges.Dtos.UserChallengesListViewModel()
+                    {
+                        Id = x.UserChallengeBind.Id,
+                        Challenge = x.UserChallengeBind.Challenge != null ? new global::Application.Challenges.Dtos.ChallengeViewModel()
+                        {
+                            Id = x.UserChallengeBind.Challenge.Id,
+                            Name = x.UserChallengeBind.Challenge.Name,
+                            Description = x.UserChallengeBind.Challenge.Description,
+                            StartDate = x.UserChallengeBind.Challenge.StartDate,
+                            EndDate = x.UserChallengeBind.Challenge.EndDate,
+                            Author = x.UserChallengeBind.Challenge.Author != null ? new global::Application.Users.Dtos.UserViewModel()
+                            {
+                                Id = x.UserChallengeBind.Challenge.Author.Id,
+                                Username = x.UserChallengeBind.Challenge.Author.Username,
+                                Firstname = x.UserChallengeBind.Challenge.Author.Firstname,
+                                Lastname = x.UserChallengeBind.Challenge.Author.Lastname,
+                                PhotoUrl = x.UserChallengeBind.Challenge.Author.PhotoUrl,
+                                CreatedAt = x.UserChallengeBind.Challenge.Author.CreatedAt,
+                                UpdatedAt = x.UserChallengeBind.Challenge.Author.UpdatedAt,
+                                TelegramId = x.UserChallengeBind.Challenge.Author.TelegramId,
+                                IsArchive = x.UserChallengeBind.Challenge.Author.IsArchive,
+                            } : default,
+                            IsArchive = x.UserChallengeBind.Challenge.IsArchive,
+                            CreatedAt = x.UserChallengeBind.Challenge.CreatedAt,
+                            UpdatedAt = x.UserChallengeBind.Challenge.UpdatedAt,
+                        } : default,
+                        User = x.UserChallengeBind.User,
+                        Status = x.UserChallengeBind.Status,
+                        JoinedAt = x.UserChallengeBind.JoinedAt,
+                    } : default,
+                    CheckInDate = x.CheckInDate,
+                    Status = x.Status,
+                }
+            );
+#nullable enable
         }
     }
 }

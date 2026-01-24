@@ -74,4 +74,16 @@ public class UserChallengeController(ISender sender)
     {
         return await sender.Send(command, cancellationToken);
     }
+
+    /// <summary>
+    /// Получение отметок выполнения испытания
+    /// </summary>
+    /// <param name="query">Модель запроса</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    [HttpGet("check-in")]
+    public async Task<List<UserChallengeCheckInListViewModel>> GetCheckIns([FromQuery] GetUserChallengeCheckInsQuery query, CancellationToken cancellationToken)
+    {
+        return await sender.Send(query, cancellationToken);
+    }
 }
